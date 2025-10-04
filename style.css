@@ -101,29 +101,23 @@ body {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* Logo Container */
-.logo-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    opacity: 0.08;
-    pointer-events: none;
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
-.logo-hexagon {
-    width: 400px;
-    height: 460px;
-    animation: rotate3d 30s linear infinite;
+.nav-logo {
+    width: 40px;
+    height: 46px;
 }
 
-.logo-hexagon svg {
+.nav-logo svg {
     width: 100%;
     height: 100%;
 }
 
-.nav-brand {
+.nav-brand h2 {
     font-size: 24px;
     font-weight: 700;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -341,6 +335,13 @@ body {
     font-size: 14px;
 }
 
+.form-label span {
+    color: #667eea;
+    font-weight: 700;
+    font-size: 16px;
+    margin-left: 8px;
+}
+
 .form-control {
     width: 100%;
     padding: 14px 18px;
@@ -361,11 +362,18 @@ body {
 select.form-control {
     cursor: pointer;
     appearance: none;
+    background-color: rgba(255, 255, 255, 0.05);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
     background-size: 16px;
     padding-right: 40px;
+}
+
+select.form-control option {
+    background: #1a1a2e;
+    color: #fff;
+    padding: 10px;
 }
 
 .slider {
@@ -399,14 +407,6 @@ select.form-control {
     cursor: pointer;
     border: none;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
-}
-
-.slider-value {
-    text-align: center;
-    margin-top: 8px;
-    font-weight: 700;
-    color: #667eea;
-    font-size: 14px;
 }
 
 /* Toggle Switch */
@@ -464,13 +464,15 @@ select.form-control {
 /* Prediction Results */
 .result-card {
     text-align: center;
-    padding: 40px;
+    padding: 40px 30px;
 }
 
 .result-card h3 {
     color: #fff;
     margin-bottom: 20px;
     font-size: 24px;
+    position: relative;
+    z-index: 1;
 }
 
 .score-circle {
@@ -508,6 +510,7 @@ select.form-control {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     z-index: 1;
+    position: relative;
 }
 
 .risk-badge {
@@ -517,6 +520,8 @@ select.form-control {
     font-weight: 600;
     font-size: 14px;
     margin-top: 20px;
+    position: relative;
+    z-index: 1;
 }
 
 .risk-badge.high {
@@ -546,6 +551,8 @@ select.form-control {
     color: #fff;
     margin-bottom: 20px;
     font-size: 18px;
+    position: relative;
+    z-index: 1;
 }
 
 .recommendation-list {
@@ -559,6 +566,7 @@ select.form-control {
     position: relative;
     color: #a1a1aa;
     line-height: 1.6;
+    z-index: 1;
 }
 
 .recommendation-list li::before {
@@ -573,13 +581,14 @@ select.form-control {
 /* Charts */
 .analytics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
     gap: 30px;
     margin-bottom: 40px;
 }
 
 .chart-container {
     padding: 30px;
+    min-height: 400px;
 }
 
 .chart-container h3 {
@@ -587,6 +596,10 @@ select.form-control {
     margin-bottom: 20px;
     color: #fff;
     font-size: 20px;
+}
+
+.chart-container canvas {
+    max-height: 350px !important;
 }
 
 .analytics-images {
