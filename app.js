@@ -10,15 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const targetSection = this.getAttribute('data-section');
             
-            // Remove active class from all links and sections
             navLinks.forEach(l => l.classList.remove('active'));
             sections.forEach(s => s.classList.remove('active'));
             
-            // Add active class to clicked link and target section
             this.classList.add('active');
             document.getElementById(targetSection).classList.add('active');
             
-            // Smooth scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     });
@@ -28,35 +25,45 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const targetSection = this.getAttribute('data-navigate');
             
-            // Remove active class from all links and sections
             navLinks.forEach(l => l.classList.remove('active'));
             sections.forEach(s => s.classList.remove('active'));
             
-            // Add active class to target
             document.querySelector(`[data-section="${targetSection}"]`).classList.add('active');
             document.getElementById(targetSection).classList.add('active');
             
-            // Smooth scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     });
 
     // Slider value updates
-    const sliders = document.querySelectorAll('.slider');
-    sliders.forEach(slider => {
-        const valueDisplay = document.getElementById(slider.id + 'Value');
-        
-        slider.addEventListener('input', function() {
-            valueDisplay.textContent = this.value;
-        });
+    const sliderUpdates = [
+        { slider: 'cgpa', display: 'cgpaValue' },
+        { slider: 'communication', display: 'communicationValue' },
+        { slider: 'majorProjects', display: 'majorProjectsValue' },
+        { slider: 'miniProjects', display: 'miniProjectsValue' },
+        { slider: 'skills', display: 'skillsValue' },
+        { slider: 'twelfth', display: 'twelfthValue' },
+        { slider: 'tenth', display: 'tenthValue' }
+    ];
+
+    sliderUpdates.forEach(item => {
+        const slider = document.getElementById(item.slider);
+        const display = document.getElementById(item.display);
+        if (slider && display) {
+            slider.addEventListener('input', function() {
+                display.textContent = this.value;
+            });
+        }
     });
 
     // Prediction form submission
     const predictionForm = document.getElementById('predictionForm');
-    predictionForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        calculatePrediction();
-    });
+    if (predictionForm) {
+        predictionForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculatePrediction();
+        });
+    }
 
     // Initialize charts
     initializeCharts();
@@ -64,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Prediction calculation
 function calculatePrediction() {
-    // Get form values
     const cgpa = parseFloat(document.getElementById('cgpa').value);
     const communication = parseFloat(document.getElementById('communication').value);
     const majorProjects = parseInt(document.getElementById('majorProjects').value);
@@ -77,23 +83,23 @@ function calculatePrediction() {
     const hackathon = document.getElementById('hackathon').checked ? 1 : 0;
     const internship = document.getElementById('internship').checked ? 1 : 0;
 
-    // Simple prediction algorithm (weighted scoring)
     let score = 0;
     
-    // CGPA (max 25 points)
-    score += ((cgpa - 6.5) / (9.1 - 6.5)) * 25;
+    // CGPA (max 25 points) - normalized from 5-10 scale
+    score += ((cgpa - 5) / (10 - 5)) * 25;
     
-    // Communication (max 15 points)
-    score += ((communication - 3.0) / (4.8 - 3.0)) * 15;
+    // Communication (max 15 points) - normalized from 0-10 scale
+    score += (communication / 10) * 15;
     
     // Projects (max 15 points)
-    score += (majorProjects * 5) + (miniProjects * 2.5);
+    score += Math.min(majorProjects * 4, 10);
+    score += Math.min(miniProjects * 1.5, 5);
     
-    // Skills (max 15 points)
-    score += ((skills - 6) / (9 - 6)) * 15;
+    // Skills (max 15 points) - normalized from 0-10 scale
+    score += (skills / 10) * 15;
     
     // Workshops (max 10 points)
-    score += workshops * 3.33;
+    score += Math.min(workshops * 3.33, 10);
     
     // 12th and 10th (max 10 points)
     score += ((twelfth - 55) / (90 - 55)) * 5;
@@ -111,7 +117,6 @@ function calculatePrediction() {
     // Normalize to 0-100
     score = Math.max(0, Math.min(100, score));
 
-    // Update UI
     updatePredictionUI(score, {
         cgpa, communication, majorProjects, miniProjects, skills, 
         workshops, internship, hackathon, backlogs
@@ -124,10 +129,8 @@ function updatePredictionUI(score, data) {
     const recommendationList = document.getElementById('recommendationList');
     const scoreCircle = document.querySelector('.score-circle');
 
-    // Update score
     scoreText.textContent = Math.round(score) + '%';
 
-    // Update circle gradient based on score
     const gradientEnd = (score / 100) * 360;
     scoreCircle.style.background = `conic-gradient(
         from 0deg,
@@ -136,7 +139,6 @@ function updatePredictionUI(score, data) {
         rgba(255, 255, 255, 0.1) ${gradientEnd}deg
     )`;
 
-    // Update risk badge
     let riskClass, riskText;
     if (score >= 70) {
         riskClass = 'high';
@@ -152,7 +154,6 @@ function updatePredictionUI(score, data) {
     riskBadge.className = 'risk-badge ' + riskClass;
     riskBadge.textContent = riskText;
 
-    // Generate recommendations
     const recommendations = generateRecommendations(score, data);
     recommendationList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
 }
@@ -164,7 +165,7 @@ function generateRecommendations(score, data) {
         recommendations.push('Focus on improving your CGPA - aim for 7.5+ to significantly boost placement chances');
     }
 
-    if (data.skills < 7) {
+    if (data.skills < 6) {
         recommendations.push('Develop more technical skills - target 6-8 diverse programming languages and tools');
     }
 
@@ -172,7 +173,7 @@ function generateRecommendations(score, data) {
         recommendations.push('Gain internship experience - it can increase placement probability by up to 70%');
     }
 
-    if (data.communication < 4.0) {
+    if (data.communication < 6) {
         recommendations.push('Improve communication skills through practice, training, and mock interviews');
     }
 
@@ -181,7 +182,7 @@ function generateRecommendations(score, data) {
     }
 
     if (data.majorProjects < 2) {
-        recommendations.push('Work on major projects to showcase your technical capabilities and problem-solving skills');
+        recommendations.push('Work on more major projects to showcase your technical capabilities and problem-solving skills');
     }
 
     if (data.workshops < 2) {
@@ -203,7 +204,6 @@ function generateRecommendations(score, data) {
 
 // Initialize charts
 function initializeCharts() {
-    // Feature Importance Chart
     const featureCtx = document.getElementById('featureChart');
     if (featureCtx) {
         new Chart(featureCtx, {
@@ -235,7 +235,8 @@ function initializeCharts() {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
                 plugins: {
                     legend: {
                         display: false
@@ -265,7 +266,6 @@ function initializeCharts() {
         });
     }
 
-    // Model Performance Chart
     const performanceCtx = document.getElementById('performanceChart');
     if (performanceCtx) {
         new Chart(performanceCtx, {
@@ -291,7 +291,8 @@ function initializeCharts() {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
                 plugins: {
                     legend: {
                         position: 'bottom',
