@@ -15,30 +15,36 @@
         <div class="shape shape3"></div>
     </div>
 
-    <nav class="navbar">
-        <div class="nav-brand">
-            <svg class="nav-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <nav class="navbar">
+    <div class="nav-brand">
+        <div class="nav-logo">
+            <svg viewBox="0 0 100 115" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 2.5 L95 28.75 L95 81.25 L50 107.5 L5 81.25 L5 28.75 Z" 
+                      fill="none" stroke="url(#gradient1)" stroke-width="3"/>
+                <path d="M50 15 L80 32.5 L80 77.5 L50 95 L20 77.5 L20 32.5 Z" 
+                      fill="none" stroke="url(#gradient2)" stroke-width="2.5"/>
                 <defs>
-                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#e6d5b8;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#c9a86a;stop-opacity:1" />
+                    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
                     </linearGradient>
                 </defs>
-                <path d="M50 10 L70 30 L70 70 L50 90 L30 70 L30 30 Z" stroke="url(#logoGrad)" stroke-width="3" fill="none"/>
-                <path d="M50 25 L60 35 L60 65 L50 75 L40 65 L40 35 Z" stroke="url(#logoGrad)" stroke-width="3" fill="none"/>
-                <path d="M50 45 L50 75" stroke="url(#logoGrad)" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="50" cy="40" r="3" fill="url(#logoGrad)"/>
             </svg>
-            PlacementAI
         </div>
-        <ul class="nav-menu">
-            <li><a class="nav-link active" data-section="dashboard">Dashboard</a></li>
-            <li><a class="nav-link" data-section="predict">Predict</a></li>
-            <li><a class="nav-link" data-section="analytics">Analytics</a></li>
-            <li><a class="nav-link" data-section="clusters">Clusters</a></li>
-            <li><a class="nav-link" data-section="insights">Insights</a></li>
-        </ul>
-    </nav>
+        <h2>PlacementAI</h2>
+    </div>
+    <ul class="nav-menu">
+        <li><a class="nav-link active" data-section="dashboard">Dashboard</a></li>
+        <li><a class="nav-link" data-section="predict">Predict</a></li>
+        <li><a class="nav-link" data-section="analytics">Analytics</a></li>
+        <li><a class="nav-link" data-section="clusters">Clusters</a></li>
+        <li><a class="nav-link" data-section="insights">Insights</a></li>
+    </ul>
+</nav>
 
     <div class="content">
         <!-- Dashboard Section -->
